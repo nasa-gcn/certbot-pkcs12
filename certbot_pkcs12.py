@@ -27,13 +27,12 @@ def _load_certs(path):
             yield load_pem_x509_certificate(delimiter + section)
 
 
+@zope.interface.implementer(interfaces.IInstaller)
+@zope.interface.provider(interfaces.IPluginFactory)
 class Installer(common.Plugin):
     """PKCS#12 installer."""
 
-    zope.interface.implements(interfaces.IInstaller)
-    zope.interface.classProvides(interfaces.IPluginFactory)
-
-    description = "PKCS#12 installer plugin."
+    description = "Install key and certificate in a PKCS#12 archive"
 
     @classmethod
     def add_parser_arguments(cls, add):
@@ -45,6 +44,10 @@ class Installer(common.Plugin):
 
     def deploy_cert(self, domain, cert_path, key_path,
                     chain_path, fullchain_path):
+        location = self.conf('location')
+        if not location:
+            return
+
         key = _load_key(key_path)
         cert, = _load_certs(cert_path)
         chain = _load_certs(chain_path)
@@ -58,7 +61,7 @@ class Installer(common.Plugin):
         out_bytes = serialize_key_and_certificates(
             domain, key, cert, chain, encryption)
 
-        with atomic_save(self.conf('location')) as f:
+        with atomic_save(location) as f:
             f.write(out_bytes)
 
     def enhance(self, domain, enhancement, options=None):
