@@ -61,8 +61,10 @@ class Installer(common.Plugin, interfaces.Installer):
         out_bytes = serialize_key_and_certificates(
             domain, key, cert, chain, encryption)
 
-        with atomic_save(self.conf('location')) as f:
+        location = self.conf('location')
+        with atomic_save(location) as f:
             f.write(out_bytes)
+        display_util.notify(f'The PKCS#12 archive is stored at {location}.')
 
     def enhance(self, domain, enhancement, options=None):
         pass
