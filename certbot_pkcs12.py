@@ -1,6 +1,7 @@
 """Certbot PKCS#12 installer plugin."""
 from boltons.fileutils import atomic_save
 from certbot import interfaces
+from certbot.display import util as display_util
 from certbot.plugins import common
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.primitives.serialization.pkcs12 import (
