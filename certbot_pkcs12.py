@@ -7,6 +7,7 @@ from cryptography.hazmat.primitives.serialization.pkcs12 import (
     serialize_key_and_certificates)
 from cryptography.hazmat.primitives.serialization import (
     BestAvailableEncryption, load_pem_private_key, NoEncryption)
+import zope.interface
 
 
 def _load_bytes(path):
@@ -26,8 +27,11 @@ def _load_certs(path):
             yield load_pem_x509_certificate(delimiter + section)
 
 
-class Installer(common.Plugin, interfaces.Installer):
+class Installer(common.Plugin):
     """PKCS#12 installer."""
+
+    zope.interface.implements(interfaces.IInstaller)
+    zope.interface.classProvides(interfaces.IPluginFactory)
 
     description = "PKCS#12 installer plugin."
 
