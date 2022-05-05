@@ -36,6 +36,9 @@ class Installer(common.Plugin, interfaces.Installer):
         add("location", help="Location of PKCS#12 archive.")
         add("password", help="PKCS#12 archive password.")
 
+    def prepare(self):
+        pass
+
     def more_info(self):
         return 'Install the key and certificate in a PKCS#12 archive.'
 
