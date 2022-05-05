@@ -1,5 +1,4 @@
 """Certbot PKCS#12 installer plugin."""
-from boltons.fileutils import atomic_save
 from certbot import interfaces
 from certbot.display import util as display_util
 from certbot.plugins import common
@@ -62,7 +61,7 @@ class Installer(common.Plugin, interfaces.Installer):
             domain.encode(), key, cert, chain, encryption)
 
         location = self.conf('location')
-        with atomic_save(location) as f:
+        with open(location, 'wb') as f:
             f.write(out_bytes)
         display_util.notify(f'The PKCS#12 archive is stored at {location}.')
 
