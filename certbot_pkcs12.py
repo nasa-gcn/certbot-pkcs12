@@ -59,7 +59,7 @@ class Installer(common.Plugin, interfaces.Installer):
             encryption = BestAvailableEncryption(password.encode())
 
         out_bytes = serialize_key_and_certificates(
-            domain, key, cert, chain, encryption)
+            domain.encode(), key, cert, chain, encryption)
 
         location = self.conf('location')
         with atomic_save(location) as f:
