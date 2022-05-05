@@ -16,7 +16,7 @@ def _load_bytes(path):
 
 
 def _load_key(path):
-    return load_pem_private_key(_load_bytes(path))
+    return load_pem_private_key(_load_bytes(path), password=None)
 
 
 def _load_certs(path):
