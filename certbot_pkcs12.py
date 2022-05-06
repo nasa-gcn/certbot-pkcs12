@@ -2,11 +2,7 @@
 from certbot import interfaces
 from certbot.display import util as display_util
 from certbot.plugins import common
-from cryptography.x509 import load_pem_x509_certificate
-from cryptography.hazmat.primitives.serialization.pkcs12 import (
-    serialize_key_and_certificates)
-from cryptography.hazmat.primitives.serialization import (
-    BestAvailableEncryption, load_pem_private_key, NoEncryption)
+from OpenSSL import crypto
 
 
 def _load_bytes(path):
@@ -15,7 +11,11 @@ def _load_bytes(path):
 
 
 def _load_key(path):
-    return load_pem_private_key(_load_bytes(path), password=None)
+    return crypto.load_privatekey(crypto.FILETYPE_PEM, _load_bytes(path))
+
+
+def _load_cert(path):
+    return crypto.load_certificate(crypto.FILETYPE_PEM, _load_bytes(path))
 
 
 def _load_certs(path):
@@ -23,7 +23,8 @@ def _load_certs(path):
     for section in _load_bytes(path).split(delimiter):
         section = section.strip()
         if section:
-            yield load_pem_x509_certificate(delimiter + section)
+            yield crypto.load_certificate(
+                crypto.FILETYPE_PEM, delimiter + section)
 
 
 class Installer(common.Plugin, interfaces.Installer):
@@ -47,18 +48,15 @@ class Installer(common.Plugin, interfaces.Installer):
 
     def deploy_cert(self, domain, cert_path, key_path,
                     chain_path, fullchain_path):
-        key = _load_key(key_path)
-        cert, = _load_certs(cert_path)
-        chain = _load_certs(chain_path)
         password = self.conf('password')
+        if password is not None:
+            password = password.encode()
 
-        if password is None:
-            encryption = NoEncryption()
-        else:
-            encryption = BestAvailableEncryption(password.encode())
-
-        out_bytes = serialize_key_and_certificates(
-            domain.encode(), key, cert, chain, encryption)
+        pkcs12 = crypto.PKCS12()
+        pkcs12.set_key(_load_key(key_path))
+        pkcs12.set_certificate(_load_cert(cert_path))
+        pkcs12.set_ca_certificates(_load_certs(chain_path))
+        out_bytes = pkcs12.export(password=password)
 
         location = self.conf('location')
         with open(location, 'wb') as f:
