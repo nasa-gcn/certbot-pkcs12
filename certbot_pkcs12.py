@@ -35,7 +35,7 @@ class Installer(common.Plugin, interfaces.Installer):
     @classmethod
     def add_parser_arguments(cls, add):
         add("location", help="Location of PKCS#12 archive.")
-        add("password", help="PKCS#12 archive password.")
+        add("passphrase", help="PKCS#12 archive passphrase.")
 
     def prepare(self):
         pass
@@ -48,15 +48,15 @@ class Installer(common.Plugin, interfaces.Installer):
 
     def deploy_cert(self, domain, cert_path, key_path,
                     chain_path, fullchain_path):
-        password = self.conf('password')
-        if password is not None:
-            password = password.encode()
+        passphrase = self.conf('passphrase')
+        if passphrase is not None:
+            passphrase = passphrase.encode()
 
         pkcs12 = crypto.PKCS12()
         pkcs12.set_privatekey(_load_key(key_path))
         pkcs12.set_certificate(_load_cert(cert_path))
         pkcs12.set_ca_certificates(_load_certs(chain_path))
-        out_bytes = pkcs12.export(password=password)
+        out_bytes = pkcs12.export(passphrase=passphrase)
 
         location = self.conf('location')
         with open(location, 'wb') as f:
