@@ -53,7 +53,7 @@ class Installer(common.Plugin, interfaces.Installer):
             password = password.encode()
 
         pkcs12 = crypto.PKCS12()
-        pkcs12.set_key(_load_key(key_path))
+        pkcs12.set_privatekey(_load_key(key_path))
         pkcs12.set_certificate(_load_cert(cert_path))
         pkcs12.set_ca_certificates(_load_certs(chain_path))
         out_bytes = pkcs12.export(password=password)
