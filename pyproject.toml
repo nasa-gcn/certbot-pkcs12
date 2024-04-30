@@ -1,3 +1,32 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=60", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "certbot-pkcs12"
+license = { text = "Apache-2.0" }
+description = "PKCS#12 installer plugin for Certbot and Let's Encrypt"
+readme = "README.md"
+authors = [ { name = "Leo Singer", email = "leo.singer@ligo.org" } ]
+dynamic = [ "version" ]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Plugins",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Security :: Cryptography",
+]
+dependencies = [
+    "certbot >= 1.19.0",
+    "pyOpenSSL < 24.1.0",
+]
+requires-python = ">=3.8"
+
+[project.urls]
+source = "https://github.com/nasa-gcn/certbot-pkcs12"
+
+[project.entry-points."certbot.plugins"]
+pkcs12 = "certbot_pkcs12:Installer"
+
+[tool.setuptools_scm]
