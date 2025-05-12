@@ -7,12 +7,12 @@ in a [PKCS#12](https://en.wikipedia.org/wiki/PKCS_12) archive.
 # Example
 
 ## Installing PKCS#12
-`certbot install -i pkcs12 --pkcs12-location /etc/locationToPlaceFile.ptx`
+`certbot install -i pkcs12 --pkcs12-location /etc/locationToPlaceFile.pfx`
 
 ## Intergrating with other commands
-`certbot some_options --installer pkcs12 --pkcs12-location /path/to/your/pkcs12.pfx`
+`certbot some_options --installer pkcs12 --pkcs12-location /path/to/your/pkcs12.p12`
 
 This probably save your option in configuration files and will be applied in renewal
 :
 
-`certbot renew # auto install due to previous options`
+`certbot renew # auto install will apply previous options`
