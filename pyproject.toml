@@ -19,7 +19,7 @@ classifiers = [
 ]
 dependencies = [
     "certbot >= 1.19.0",
-    "pyOpenSSL < 24.1.0",
+    "cryptography>=42.0.8",
 ]
 requires-python = ">=3.8"
 
