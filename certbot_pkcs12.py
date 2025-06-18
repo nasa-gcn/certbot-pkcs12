@@ -22,10 +22,10 @@ def _load_cert(path):
 
 def _load_certs(path):
     delimiter = b'-----BEGIN CERTIFICATE-----\n'
-     for section in _load_bytes(path).split(delimiter):
-         section = section.strip()
-         if section:
-             yield load_pem_x509_certificate(delimiter + section)
+    for section in _load_bytes(path).split(delimiter):
+        section = section.strip()
+        if section:
+            yield load_pem_x509_certificate(delimiter + section)
 
 
 class Installer(common.Plugin, interfaces.Installer):
