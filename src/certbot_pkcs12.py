@@ -1,14 +1,21 @@
 """Certbot PKCS#12 installer plugin."""
+
 from certbot import interfaces
 from certbot.display import util as display_util
 from certbot.plugins import common
-from cryptography.hazmat.primitives.serialization import NoEncryption, BestAvailableEncryption, load_pem_private_key
-from cryptography.hazmat.primitives.serialization.pkcs12 import serialize_key_and_certificates
+from cryptography.hazmat.primitives.serialization import (
+    BestAvailableEncryption,
+    NoEncryption,
+    load_pem_private_key,
+)
+from cryptography.hazmat.primitives.serialization.pkcs12 import (
+    serialize_key_and_certificates,
+)
 from cryptography.x509 import load_pem_x509_certificate
 
 
 def _load_bytes(path):
-    with open(path, 'rb') as f:
+    with open(path, "rb") as f:
         return f.read()
 
 
@@ -21,7 +28,7 @@ def _load_cert(path):
 
 
 def _load_certs(path):
-    delimiter = b'-----BEGIN CERTIFICATE-----\n'
+    delimiter = b"-----BEGIN CERTIFICATE-----\n"
     for section in _load_bytes(path).split(delimiter):
         section = section.strip()
         if section:
@@ -42,14 +49,13 @@ class Installer(common.Plugin, interfaces.Installer):
         pass
 
     def more_info(self):
-        return 'Install the key and certificate in a PKCS#12 archive.'
+        return "Install the key and certificate in a PKCS#12 archive."
 
     def get_all_names(self):
         return []
 
-    def deploy_cert(self, domain, cert_path, key_path,
-                    chain_path, fullchain_path):
-        passphrase = self.conf('passphrase')
+    def deploy_cert(self, domain, cert_path, key_path, chain_path, fullchain_path):
+        passphrase = self.conf("passphrase")
         if passphrase is not None:
             passphrase = passphrase.encode()
 
@@ -62,13 +68,15 @@ class Installer(common.Plugin, interfaces.Installer):
             key=private_key,
             cert=certificate,
             cas=ca_certificates,
-            encryption_algorithm=NoEncryption() if passphrase is None else BestAvailableEncryption(passphrase)
+            encryption_algorithm=NoEncryption()
+            if passphrase is None
+            else BestAvailableEncryption(passphrase),
         )
 
-        location = self.conf('location')
-        with open(location, 'wb') as f:
+        location = self.conf("location")
+        with open(location, "wb") as f:
             f.write(pkcs12_data)
-        display_util.notify(f'The PKCS#12 archive is stored at {location}.')
+        display_util.notify(f"The PKCS#12 archive is stored at {location}.")
 
     def enhance(self, domain, enhancement, options=None):
         pass
