@@ -13,9 +13,11 @@ from certbot_pkcs12 import Installer
 
 
 class Pkcs12Test(test_util.ConfigTestCase):
+    passphrase = None
+
     @mock.patch("certbot_pkcs12.display_util.notify")
     def test_install(self, mock_notify):
-        self.config.pkcs12_passphrase = None
+        self.config.pkcs12_passphrase = self.passphrase
         self.config.pkcs12_location = os.path.join(
             self.config.config_dir, "keystore.p12"
         )
@@ -44,7 +46,14 @@ class Pkcs12Test(test_util.ConfigTestCase):
         )
 
         with open(self.config.pkcs12_location, "rb") as f:
-            load_key_and_certificates(f.read(), password=None)
+            load_key_and_certificates(
+                f.read(),
+                password=None if self.passphrase is None else self.passphrase.encode(),
+            )
+
+
+class Pkcs12PassphraseTest(Pkcs12Test):
+    passphrase = "snakeoil"
 
 
 def test_help(capsys):
