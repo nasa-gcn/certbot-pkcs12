@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 (2024-07-01)
+
+- Add usage instructions to the README file.
+- This package now has 100% test coverage.
+
 ## 0.3.0 (2024-06-30)
 
 - Use the Cryptography package to serialize PKCS12 files. Drop
