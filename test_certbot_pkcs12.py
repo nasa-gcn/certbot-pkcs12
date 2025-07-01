@@ -25,7 +25,14 @@ class Pkcs12Test(test_util.ConfigTestCase):
         live_path = os.path.join(
             self.config.config_dir, constants.LIVE_DIR, lineage_name
         )
-        Installer(self.config, "pkcs12").deploy_cert(
+        installer = Installer(self.config, "pkcs12")
+
+        assert (
+            "Install the key and certificate in a PKCS#12 archive"
+            in installer.more_info()
+        )
+
+        installer.deploy_cert(
             None,
             os.path.join(live_path, "cert.pem"),
             os.path.join(live_path, "privkey.pem"),
