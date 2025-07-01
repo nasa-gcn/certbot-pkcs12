@@ -1,3 +1,6 @@
+[![PyPI](https://img.shields.io/pypi/v/certbot-pkcs12)](https://pypi.org/project/certbot-pkcs12/)
+[![codecov](https://codecov.io/gh/nasa-gcn/certbot-pkcs12/graph/badge.svg?token=13rI9YvWym)](https://codecov.io/gh/nasa-gcn/certbot-pkcs12)
+
 # Certbot PKCS#12 plugin
 
 This is an installer plugin for [certbot](https://certbot.eff.org). Whenever
