@@ -1,8 +1,7 @@
 """Certbot PKCS#12 installer plugin."""
 
-from certbot import interfaces
+from certbot._internal.plugins.null import Installer
 from certbot.display import util as display_util
-from certbot.plugins import common
 from cryptography.hazmat.primitives.serialization import (
     BestAvailableEncryption,
     NoEncryption,
@@ -35,7 +34,7 @@ def _load_certs(path):
             yield load_pem_x509_certificate(delimiter + section)
 
 
-class Installer(common.Plugin, interfaces.Installer):
+class Installer(Installer):
     """PKCS#12 installer."""
 
     description = "PKCS#12 installer plugin."
@@ -45,14 +44,8 @@ class Installer(common.Plugin, interfaces.Installer):
         add("location", help="Location of PKCS#12 archive.")
         add("passphrase", help="PKCS#12 archive passphrase.")
 
-    def prepare(self):
-        pass
-
     def more_info(self):
         return "Install the key and certificate in a PKCS#12 archive."
-
-    def get_all_names(self):
-        return []
 
     def deploy_cert(self, domain, cert_path, key_path, chain_path, fullchain_path):
         passphrase = self.conf("passphrase")
@@ -77,24 +70,3 @@ class Installer(common.Plugin, interfaces.Installer):
         with open(location, "wb") as f:
             f.write(pkcs12_data)
         display_util.notify(f"The PKCS#12 archive is stored at {location}.")
-
-    def enhance(self, domain, enhancement, options=None):
-        pass
-
-    def supported_enhancements(self):
-        return []
-
-    def save(self, title=None, temporary=False):
-        pass
-
-    def rollback_checkpoints(self, rollback=1):
-        pass
-
-    def recovery_routine(self):
-        pass
-
-    def config_test(self):
-        pass
-
-    def restart(self):
-        pass
