@@ -2,7 +2,9 @@ import os
 from unittest import mock
 
 import certbot.tests.util as test_util
+import pytest
 from certbot._internal import constants
+from certbot.main import main
 from cryptography.hazmat.primitives.serialization.pkcs12 import (
     load_key_and_certificates,
 )
@@ -36,3 +38,11 @@ class Pkcs12Test(test_util.ConfigTestCase):
 
         with open(self.config.pkcs12_location, "rb") as f:
             load_key_and_certificates(f.read(), password=None)
+
+
+def test_help(capsys):
+    with pytest.raises(SystemExit):
+        main(["--help", "pkcs12"])
+    captured = capsys.readouterr().out
+    for arg in ["location", "passphrase"]:
+        assert f"--pkcs12-{arg}" in captured
