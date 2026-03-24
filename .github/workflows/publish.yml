@@ -8,6 +8,6 @@ on:
 
 jobs:
   publish:
-    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@d9b81a07e789d1b1921ab5fe33de2ddcbbd02c3f  # v2.3.0
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@ccd2f9f4a24f34ea1165a717af125260d93bb5c1  # v2.6.1
     secrets:
       pypi_token: ${{ secrets.pypi_token }}
