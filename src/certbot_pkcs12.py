@@ -1,5 +1,6 @@
 """Certbot PKCS#12 installer plugin."""
 
+from certbot import interfaces
 from certbot._internal.plugins.null import Installer
 from certbot.display import util as display_util
 from cryptography.hazmat.primitives.serialization import (
@@ -48,6 +49,12 @@ class Installer(Installer):
         return "Install the key and certificate in a PKCS#12 archive."
 
     def deploy_cert(self, domain, cert_path, key_path, chain_path, fullchain_path):
+        self._write_pkcs12(cert_path, key_path, chain_path)
+
+    def renew_deploy(self, lineage):
+        self._write_pkcs12(lineage.cert_path, lineage.key_path, lineage.chain_path)
+
+    def _write_pkcs12(self, cert_path, key_path, chain_path):
         passphrase = self.conf("passphrase")
         if passphrase is not None:
             passphrase = passphrase.encode()
@@ -70,3 +77,6 @@ class Installer(Installer):
         with open(location, "wb") as f:
             f.write(pkcs12_data)
         display_util.notify(f"The PKCS#12 archive is stored at {location}.")
+
+
+interfaces.RenewDeployer.register(Installer)
