@@ -6,6 +6,8 @@ on:
     tags:
       - v*
 
+permissions: {}
+
 jobs:
   publish:
     uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@2835f0cacddf3f8de198db9afdb5354a5cebe0ef  # v2.6.3
