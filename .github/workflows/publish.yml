@@ -10,6 +10,6 @@ permissions: {}
 
 jobs:
   publish:
-    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@2835f0cacddf3f8de198db9afdb5354a5cebe0ef  # v2.6.3
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@1285b95e32c783cfa40eb2ffbd6ca4cd023fb884  # v3.2.2
     secrets:
       pypi_token: ${{ secrets.pypi_token }}
