@@ -1,7 +1,8 @@
 """Certbot PKCS#12 installer plugin."""
 
-from certbot._internal.plugins.null import Installer
+from certbot._internal.plugins.null import Installer as NullInstaller
 from certbot.display import util as display_util
+from certbot.interfaces import RenewDeployer
 from cryptography.hazmat.primitives.serialization import (
     BestAvailableEncryption,
     NoEncryption,
@@ -34,7 +35,7 @@ def _load_certs(path):
             yield load_pem_x509_certificate(delimiter + section)
 
 
-class Installer(Installer):
+class Installer(NullInstaller, RenewDeployer):
     """PKCS#12 installer."""
 
     description = "PKCS#12 installer plugin."
@@ -48,6 +49,12 @@ class Installer(Installer):
         return "Install the key and certificate in a PKCS#12 archive."
 
     def deploy_cert(self, domain, cert_path, key_path, chain_path, fullchain_path):
+        self._write_pkcs12(cert_path, key_path, chain_path)
+
+    def renew_deploy(self, lineage, *args, **kwargs):
+        self._write_pkcs12(lineage.cert_path, lineage.key_path, lineage.chain_path)
+
+    def _write_pkcs12(self, cert_path, key_path, chain_path):
         passphrase = self.conf("passphrase")
         if passphrase is not None:
             passphrase = passphrase.encode()
