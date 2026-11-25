@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0 (unreleased)
+
+- Require Python >= 3.11.
+
 ## 0.3.1 (2024-07-01)
 
 - Add usage instructions to the README file.
