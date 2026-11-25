@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 (unreleased)
+## 0.4.0 (2026-11-25)
 
 - Require Python >= 3.11.
 - Deploy PKCS#12 archives after certificate renewal. Thanks, @zent1n0!
