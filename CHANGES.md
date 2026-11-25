@@ -3,6 +3,8 @@
 ## 0.4.0 (unreleased)
 
 - Require Python >= 3.11.
+- Deploy PKCS#12 archives after certificate renewal. Thanks, @zent1n0!
+- Enable trusted publishing to PyPI.
 
 ## 0.3.1 (2024-07-01)
 
